@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Home</ion-title>
+  <ion-buttons start>
+      <button ion-button icon-only [navPush]="newWTPage">
+        <ion-icon name="add-circle" color="primary"></ion-icon>
+      </button>
+    </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-item>
+  <h2>Welcome to WhatTodo</h2>
+  <p>
+    on this page you can see the whatTodo on which you participate
+  </p>
+  </ion-item>
+  <ion-card *ngFor="let wT of wTodos" [navPush]="wTodoPage" [navParams]="wT">
+    <ion-card-header>
+        {{wT.title}}
+    </ion-card-header>
+    <ion-card-content>
+    {{wT.description}}
+    </ion-card-content>
+  </ion-card>
+</ion-content>
