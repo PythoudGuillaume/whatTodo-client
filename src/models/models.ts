@@ -1,11 +1,12 @@
-export class WTodo{
-  id:number;
-  description:string;
-  title:string;
-  answer:[Choice];
+export class List {
+  id: string;
+  public: boolean;
+  title: string;
+  items: [Item];
 }
 
-export class Choice{
-  title:string;
-  vote: number;
+export class Item {
+  id: string;
+  text: string;
+  votes: [number];
 }

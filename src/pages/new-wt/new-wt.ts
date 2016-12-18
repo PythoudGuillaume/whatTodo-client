@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, Events } from 'ionic-angular';
 
+import { List } from '../../models/models'
 import { TodoServices } from '../../providers/todo-services';
 
-import {WTodo, Choice } from '../../models/models';
 
 import {WTodoPage} from '../w-todo/w-todo';
 
@@ -18,19 +18,22 @@ import {WTodoPage} from '../w-todo/w-todo';
   templateUrl: 'new-wt.html'
 })
 export class NewWTPage {
-  public newWT:WTodo;
+  public list: List = new List;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public todoServices: TodoServices) {
-    this.newWT = new WTodo;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public todoServices: TodoServices, public evt :Events) {
+    this.list.public = false;
   }
 
-
-  addWT(){
-    let createdWT = this.todoServices.addWTodo(this.newWT);
-    this.navCtrl.pop();
+  addList() {
+    this.todoServices.addList(this.list).subscribe((list) => {
+      this.evt.publish("lists")
+      console.log(list)
+      this.navCtrl.push(WTodoPage, list)
+      this.navCtrl.remove(1)
+    });
   }
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad NewWTPage');
   }
-
 }

@@ -1,53 +1,82 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import {WTodo, Choice } from '../models/models'
+import { Events } from 'ionic-angular';
+import { Http, Headers, RequestOptions} from '@angular/http';
+import { Storage } from '@ionic/storage';
+import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
-
+import { List, Item } from '../models/models'
 /*
   Generated class for the TodoServices provider.
 
   See https://angular.io/docs/ts/latest/guide/dependency-injection.html
   for more info on providers and Angular 2 DI.
 */
+
+const API = 'http://localhost:5000';
+
 @Injectable()
 export class TodoServices {
-  public wTodos:WTodo[] = [{id: 1,title:"test", description:"voici une description", answer:[{title:'a1',vote:10},{title:"a2",vote:11}]},
-                    {id: 2, title:"test2", description:"voici une description", answer:[{title:'a1',vote:10},{title:"a2",vote:11}]},
-                    {id: 3, title:"test3", description:"voici une description", answer:[{title:'a1',vote:10},{title:"a2",vote:11}]}];
-  private id = 3;
 
-  constructor(public http: Http) {
+  public user;
+  private OPTIONS: RequestOptions;
+
+  constructor(public http: Http, public evt: Events, public storage: Storage) {
     console.log('Hello TodoServices Provider');
-    }
+    storage.get('user')
+    .then(user =>
+      user
+      ? this.http.get(`${API}/users/${user.id}`)
+      : this.http.post(`${API}/users`, {})
+     )
+    .then(obs => obs.subscribe(data => {
+        this.user = data.json()
+        this.storage.set('user', this.user);
+        console.log(this.user)
 
-  getAllWTodo():WTodo[]{
-    return this.wTodos;
+        let head = new Headers()
+        head.append('Content-Type', 'application/json')
+        head.append('Authorization', 'Bearer ' + this.user.token)
+
+        this.OPTIONS = new RequestOptions({ headers: head })
+        evt.publish("lists")
+      }))
+   }
+
+  getLists(): Observable<List[]> {
+    return this.http.get(`${API}/lists`, this.OPTIONS)
+    .map(res => res.json())
+    .catch(this.handleError)
   }
 
-  getWTodo(id:number):WTodo{
-    return this.wTodos.find(wT => wT.id == id);
+  getList(id: string): Observable<List> {
+    return this.http.get(`${API}/lists/${id}`, this.OPTIONS)
+    .map(res => res.json())
+    .catch(this.handleError)
   }
 
-  addWTodo(wT:WTodo){
-    this.id += 1;
-    wT.id = this.id;
-    this.wTodos.push(wT);
-    return wT;
+  addList(list: List): Observable<List> {
+    console.log(list)
+    return this.http.post(`${API}/lists`, list, this.OPTIONS)
+    .map(res => res.json())
+    .catch(this.handleError)
   }
 
-  addAnswer(id:number, answer:string){
-    let wTD = this.wTodos.find(wT => wT.id == id );
-    if (wTD.answer == null) wTD.answer = [{title:answer, vote:0}];
-    else wTD.answer.push({title:answer, vote:0});
-    console.log(this.wTodos);
+  addItem (listId: string, text: string): Observable<Item> {
+    let item = { text }
+    return this.http.post(`${API}/lists/${listId}/items`, item, this.OPTIONS)
+    .map(res => res.json())
+    .catch(this.handleError)
   }
 
-  vote(wTId:number, ans:string){
-    this.wTodos.find(wT => wT.id == wTId).answer.find(a => a.title == ans).vote+=1;
+  vote (listId: string, itemId: string, v: number): Observable<number[]> {
+    let vote = { vote: v }
+    return this.http.post(`${API}/lists/${listId}/items/${itemId}/votes`, vote, this.OPTIONS)
+    .map(res => res.json())
+    .catch(this.handleError)
   }
 
-  addTo(a, o){
-    a = a.concat(o);
+  private handleError(error) {
+    console.error(error);
+    return Observable.throw(error.json().error || 'Server error');
   }
-
 }

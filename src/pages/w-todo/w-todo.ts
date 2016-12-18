@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, Events } from 'ionic-angular';
 
 import { TodoServices } from '../../providers/todo-services';
 
-import {WTodo, Choice } from '../../models/models';
+import { List } from '../../models/models';
 
 
 
@@ -19,26 +19,34 @@ import {WTodo, Choice } from '../../models/models';
   templateUrl: 'w-todo.html'
 })
 export class WTodoPage {
-  public wTodo:WTodo;
-  public answer = '';
+  public list: List;
+  public text: string = '';
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public todosServices: TodoServices) {
-    this.wTodo = this.navParams.data;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public todosServices: TodoServices, public evt: Events) {
+    this.list = this.navParams.data;
+    this.load();
+    console.log(this.list);
   }
+
 
   ionViewDidLoad() {
     console.log("wtodo page");
   }
 
-  addAnswer(){
-    console.log(this.answer);
-    this.todosServices.addAnswer(this.wTodo.id, this.answer);
-    this.wTodo = this.todosServices.getWTodo(this.wTodo.id);
-    this.answer ='';
+  load() {
+    this.todosServices.getList(this.list.id)
+    .subscribe(data => {this.list = data});
+  }
+  addItem() {
+    console.log(this.text);
+    this.todosServices.addItem(this.list.id, this.text)
+    .subscribe(() => this.load());
+    this.text ='';
   }
 
-  vote(answer:string){
-    this.todosServices.vote(this.wTodo.id, answer);
+  vote(item: string, vote: number) {
+    this.todosServices.vote(this.list.id, item, vote)
+    .subscribe(() => this.load());
   }
 
 }

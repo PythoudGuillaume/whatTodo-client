@@ -16,12 +16,9 @@
     on this page you can see the whatTodo on which you participate
   </p>
   </ion-item>
-  <ion-card *ngFor="let wT of wTodos" [navPush]="wTodoPage" [navParams]="wT">
+  <ion-card *ngFor="let list of lists" [navPush]="wTodoPage" [navParams]="list">
     <ion-card-header>
-        {{wT.title}}
+        {{list.title}}
     </ion-card-header>
-    <ion-card-content>
-    {{wT.description}}
-    </ion-card-content>
   </ion-card>
 </ion-content>

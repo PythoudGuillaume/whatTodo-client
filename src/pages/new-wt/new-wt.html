@@ -7,21 +7,21 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>newWT</ion-title>
+    <ion-title>New List</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-  <form (ngSubmit)="addWT()">
+  <form (ngSubmit)="addList()">
       <ion-item>
         <ion-label floating>Title</ion-label>
-        <ion-input type="text" [(ngModel)]="newWT.title" name="title"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label floating>Description</ion-label>
-        <ion-textarea [(ngModel)]="newWT.description" name="description"></ion-textarea>
+        <ion-input type="text" [(ngModel)]="list.title" name="title"></ion-input>
+        </ion-item>
+        <ion-item>
+        <ion-label>Public</ion-label>
+        <ion-checkbox [(ngModel)]="list.public" name="public"></ion-checkbox>
       </ion-item>
       <button ion-button type="submit" block>create</button>
   </form>
