@@ -2,6 +2,11 @@
 
   <ion-navbar>
     <ion-title>{{list.title}}</ion-title>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="pinList()">
+        <ion-icon [name]="icon()" color="primary"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>

@@ -18,11 +18,14 @@ export class NewListPage {
   }
 
   addList() {
-    this.todoServices.addList(this.list).subscribe((list) => {
+    this.todoServices.addList(this.list)
+    .subscribe((list) => {
       this.evt.publish("lists")
-      console.log(list)
-      this.navCtrl.push(ListPage, list)
-      this.navCtrl.remove(1)
+      this.todoServices.addPin(list)
+      .subscribe(() => {
+        this.navCtrl.push(ListPage, list)
+        this.navCtrl.remove(1)
+      })
     });
   }
 

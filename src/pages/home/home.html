@@ -1,24 +1,31 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Home</ion-title>
-  <ion-buttons start>
+    <ion-buttons start>
       <button ion-button icon-only [navPush]="newListPage">
         <ion-icon name="add-circle" color="primary"></ion-icon>
       </button>
     </ion-buttons>
-    </ion-navbar>
+  </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <ion-item>
-  <h2>Welcome to WhatTodo</h2>
-  <p>
-    on this page you can see the whatTodo on which you participate
-  </p>
+    <h2>Pinned lists</h2>
   </ion-item>
+  <ion-card *ngFor="let list of pins" [navPush]="listPage" [navParams]="list">
+    <ion-card-header>
+      {{list.title}}
+    </ion-card-header>
+  </ion-card>
+
+  <ion-item>
+    <h2>Public lists</h2>
+  </ion-item>
+
   <ion-card *ngFor="let list of lists" [navPush]="listPage" [navParams]="list">
     <ion-card-header>
-        {{list.title}}
+      {{list.title}}
     </ion-card-header>
   </ion-card>
 </ion-content>

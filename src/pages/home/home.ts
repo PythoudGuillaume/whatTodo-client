@@ -15,6 +15,7 @@ import { NewListPage } from '../new-list/new-list'
 })
 export class HomePage {
   public lists: List[]
+  public pins: List[]
   public listPage = ListPage
   public newListPage = NewListPage
 
@@ -24,7 +25,12 @@ export class HomePage {
     this.evt.subscribe("lists", () => this.load());
   }
 
-  load(){
-      this.todoServices.getLists().subscribe(data => { this.lists = data });
+  load() {
+    this.todoServices.getPins().subscribe(data => {
+      this.pins = data
+    });
+    this.todoServices.getLists().subscribe(data => {
+      this.lists = data.filter(list => !this.todoServices.user.pins.includes(list.id))
+    });
   }
 }

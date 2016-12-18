@@ -42,6 +42,13 @@ export class TodoServices {
     .catch(this.handleError)
   }
 
+  getPins(): Observable<List[]> {
+    return this.http.get(`${API}/users/${this.user.id}/pins`, this.OPTIONS)
+    .map(res => res.json().sort((a, b) =>
+                                (new Date(b.date)).getTime() - (new Date(a.date)).getTime()))
+    .catch(this.handleError)
+  }
+
   getList(id: string): Observable<List> {
     let list
 
@@ -89,6 +96,28 @@ export class TodoServices {
         : this.http.post(`${API}/lists/${list.id}/items/${item.id}/votes`, vote, this.OPTIONS)
     )
     .map(res => res.json())
+    .catch(this.handleError)
+  }
+
+  addPin(list: List): Observable<void> {
+    if (!this.user.pins.includes(list.id))
+      this.user.pins.push(list.id)
+    return this.setPins(this.user.pins)
+  }
+
+  removePin(list: List): Observable<void> {
+    let index = this.user.pins.indexOf(list.id)
+    if (index !== -1)
+      this.user.pins.splice(index, 1)
+    return this.setPins(this.user.pins)
+  }
+
+  setPins(lists: List[]): Observable<void> {
+    return this.http.patch(`${API}/users/${this.user.id}/pins`, lists, this.OPTIONS)
+    .map(res => {
+      this.user.pins = res.json()
+      this.evt.publish("lists")
+    })
     .catch(this.handleError)
   }
 
