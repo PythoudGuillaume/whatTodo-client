@@ -3,17 +3,17 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import {TodoServices} from '../providers/todo-services';
-import {WTodoPage} from '../pages/w-todo/w-todo';
-import {NewWTPage} from '../pages/new-wt/new-wt'
+import { TodoServices } from '../providers/todo-services';
+import { ListPage } from '../pages/list/list';
+import { NewListPage } from '../pages/new-list/new-list'
 
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    WTodoPage,
-    NewWTPage
+    ListPage,
+    NewListPage
   ],
   imports: [
     IonicModule.forRoot(MyApp)
@@ -22,9 +22,13 @@ import {NewWTPage} from '../pages/new-wt/new-wt'
   entryComponents: [
     MyApp,
     HomePage,
-    WTodoPage,
-    NewWTPage
+    ListPage,
+    NewListPage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, TodoServices, Storage]
+  providers: [
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    TodoServices,
+    Storage
+  ]
 })
 export class AppModule {}

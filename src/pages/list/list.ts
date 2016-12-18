@@ -6,19 +6,11 @@ import { TodoServices } from '../../providers/todo-services';
 
 import { List } from '../../models/models';
 
-
-
-/*
-  Generated class for the WTodo page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
-  selector: 'page-w-todo',
-  templateUrl: 'w-todo.html'
+  selector: 'page-list',
+  templateUrl: 'list.html'
 })
-export class WTodoPage {
+export class ListPage {
   public list: List;
   public text: string = '';
 
@@ -28,15 +20,15 @@ export class WTodoPage {
     console.log(this.list);
   }
 
-
   ionViewDidLoad() {
-    console.log("wtodo page");
+    console.log('ionViewDidLoad ListPage');
   }
 
   load() {
     this.todosServices.getList(this.list.id)
     .subscribe(data => {this.list = data});
   }
+
   addItem() {
     console.log(this.text);
     this.todosServices.addItem(this.list.id, this.text)

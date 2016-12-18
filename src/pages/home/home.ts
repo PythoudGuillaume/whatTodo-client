@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 
-import { NavController, NavParams, Events } from 'ionic-angular';
+import { NavController, Events } from 'ionic-angular';
 
 import { TodoServices } from '../../providers/todo-services';
 
-import { List, Item } from '../../models/models';
+import { List } from '../../models/models';
 
-import {WTodoPage} from '../w-todo/w-todo';
-import {NewWTPage} from '../new-wt/new-wt'
+import { ListPage } from '../list/list';
+import { NewListPage } from '../new-list/new-list'
 
 @Component({
   selector: 'page-home',
@@ -15,12 +15,13 @@ import {NewWTPage} from '../new-wt/new-wt'
 })
 export class HomePage {
   public lists: List[]
-  public wTodoPage = WTodoPage;
-  public newWTPage = NewWTPage;
+  public listPage = ListPage
+  public newListPage = NewListPage
 
-  constructor(public navCtrl: NavController, public todoServices: TodoServices, public evt: Events) {
+  constructor(public navCtrl: NavController,
+              public todoServices: TodoServices,
+              public evt: Events) {
     this.evt.subscribe("lists", () => this.load());
-
   }
 
   load(){

@@ -2,7 +2,7 @@
   <ion-navbar>
     <ion-title>Home</ion-title>
   <ion-buttons start>
-      <button ion-button icon-only [navPush]="newWTPage">
+      <button ion-button icon-only [navPush]="newListPage">
         <ion-icon name="add-circle" color="primary"></ion-icon>
       </button>
     </ion-buttons>
@@ -16,7 +16,7 @@
     on this page you can see the whatTodo on which you participate
   </p>
   </ion-item>
-  <ion-card *ngFor="let list of lists" [navPush]="wTodoPage" [navParams]="list">
+  <ion-card *ngFor="let list of lists" [navPush]="listPage" [navParams]="list">
     <ion-card-header>
         {{list.title}}
     </ion-card-header>
