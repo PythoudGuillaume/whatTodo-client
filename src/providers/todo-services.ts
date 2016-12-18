@@ -44,13 +44,19 @@ export class TodoServices {
 
   getLists(): Observable<List[]> {
     return this.http.get(`${API}/lists`, this.OPTIONS)
-    .map(res => res.json())
+    .map(res => { console.log(res.json()); return res })
+    .map(res => res.json().sort((a, b) =>
+                                (new Date(b.date)).getTime() - (new Date(a.date)).getTime()))
     .catch(this.handleError)
   }
 
   getList(id: string): Observable<List> {
     return this.http.get(`${API}/lists/${id}`, this.OPTIONS)
     .map(res => res.json())
+    .map(res => {
+      res.items.sort((a, b) => (b.votes[0] + b.votes[1]) - (a.votes[0] + a.votes[1]))
+      return res
+    })
     .catch(this.handleError)
   }
 
