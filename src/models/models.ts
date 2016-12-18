@@ -10,4 +10,5 @@ export class Item {
   id: string;
   text: string;
   votes: [number];
+  myVote: number;
 }

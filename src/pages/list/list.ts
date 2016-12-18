@@ -4,7 +4,7 @@ import { NavController, NavParams, Events } from 'ionic-angular';
 
 import { TodoServices } from '../../providers/todo-services';
 
-import { List } from '../../models/models';
+import { List, Item } from '../../models/models';
 
 @Component({
   selector: 'page-list',
@@ -29,15 +29,21 @@ export class ListPage {
     .subscribe(data => {this.list = data});
   }
 
+  color(item: Item, vote: number) {
+    return (item.myVote === vote)
+      ? vote === -1 ? "danger" : "secondary"
+      : "light"
+  }
+
   addItem() {
     console.log(this.text);
-    this.todosServices.addItem(this.list.id, this.text)
+    this.todosServices.addItem(this.list, this.text)
     .subscribe(() => this.load());
     this.text ='';
   }
 
-  vote(item: string, vote: number) {
-    this.todosServices.vote(this.list.id, item, vote)
+  vote(item: Item, vote: number) {
+    this.todosServices.vote(this.list, item, vote)
     .subscribe(() => this.load());
   }
 

@@ -5,12 +5,6 @@ import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import { List, Item } from '../models/models'
-/*
-  Generated class for the TodoServices provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
 
 const API = 'http://localhost:5000';
 
@@ -31,7 +25,6 @@ export class TodoServices {
     .then(obs => obs.subscribe(data => {
         this.user = data.json()
         this.storage.set('user', this.user);
-        console.log(this.user)
 
         let head = new Headers()
         head.append('Content-Type', 'application/json')
@@ -44,39 +37,57 @@ export class TodoServices {
 
   getLists(): Observable<List[]> {
     return this.http.get(`${API}/lists`, this.OPTIONS)
-    .map(res => { console.log(res.json()); return res })
     .map(res => res.json().sort((a, b) =>
                                 (new Date(b.date)).getTime() - (new Date(a.date)).getTime()))
     .catch(this.handleError)
   }
 
   getList(id: string): Observable<List> {
+    let list
+
     return this.http.get(`${API}/lists/${id}`, this.OPTIONS)
+    .flatMap(res => {
+      list = res.json()
+      list.items.sort((a, b) => (b.votes[0] + b.votes[1]) - (a.votes[0] + a.votes[1]))
+      return Observable.forkJoin(list.items.map(item => this.getMyVote(list, item)))
+    })
+    .map(items => {
+      list.items = items
+      return list
+    })
+    .catch(this.handleError)
+  }
+
+  getMyVote(list: List, item: Item): Observable<Item> {
+    return this.http.get(`${API}/lists/${list.id}/items/${item.id}/votes/me`, this.OPTIONS)
     .map(res => res.json())
     .map(res => {
-      res.items.sort((a, b) => (b.votes[0] + b.votes[1]) - (a.votes[0] + a.votes[1]))
-      return res
+      item.myVote = res
+      return item
     })
     .catch(this.handleError)
   }
 
   addList(list: List): Observable<List> {
-    console.log(list)
     return this.http.post(`${API}/lists`, list, this.OPTIONS)
     .map(res => res.json())
     .catch(this.handleError)
   }
 
-  addItem (listId: string, text: string): Observable<Item> {
+  addItem(list: List, text: string): Observable<Item> {
     let item = { text }
-    return this.http.post(`${API}/lists/${listId}/items`, item, this.OPTIONS)
+    return this.http.post(`${API}/lists/${list.id}/items`, item, this.OPTIONS)
     .map(res => res.json())
     .catch(this.handleError)
   }
 
-  vote (listId: string, itemId: string, v: number): Observable<number[]> {
+  vote(list: List, item: Item, v: number): Observable<number[]> {
     let vote = { vote: v }
-    return this.http.post(`${API}/lists/${listId}/items/${itemId}/votes`, vote, this.OPTIONS)
+    return (
+      v === item.myVote
+        ? this.http.delete(`${API}/lists/${list.id}/items/${item.id}/votes`, this.OPTIONS)
+        : this.http.post(`${API}/lists/${list.id}/items/${item.id}/votes`, vote, this.OPTIONS)
+    )
     .map(res => res.json())
     .catch(this.handleError)
   }
