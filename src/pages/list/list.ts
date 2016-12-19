@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, Events } from 'ionic-angular';
 
 import { TodoServices } from '../../providers/todo-services';
+import { SharePage } from '../share/share';
 
 import { List, Item } from '../../models/models';
 
@@ -36,6 +37,10 @@ export class ListPage {
     return this.isPinned()
     ? "star"
     : "star-outline"
+  }
+
+  share() {
+    this.navCtrl.push(SharePage, this.list)
   }
 
   pinList() {

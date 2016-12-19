@@ -17,7 +17,8 @@
         <ion-label>Public</ion-label>
         <ion-checkbox [(ngModel)]="list.public" name="public"></ion-checkbox>
       </ion-item>
-      <button ion-button type="submit" block>create</button>
+      <button ion-button type="submit" block
+        [disabled]="list.title.length === 0">create</button>
   </form>
 
 </ion-content>

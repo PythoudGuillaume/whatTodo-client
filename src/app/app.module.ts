@@ -5,7 +5,9 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { TodoServices } from '../providers/todo-services';
 import { ListPage } from '../pages/list/list';
-import { NewListPage } from '../pages/new-list/new-list'
+import { NewListPage } from '../pages/new-list/new-list';
+import { LinkPage } from '../pages/link/link';
+import { SharePage } from '../pages/share/share';
 
 
 @NgModule({
@@ -13,7 +15,9 @@ import { NewListPage } from '../pages/new-list/new-list'
     MyApp,
     HomePage,
     ListPage,
-    NewListPage
+    NewListPage,
+    LinkPage,
+    SharePage
   ],
   imports: [
     IonicModule.forRoot(MyApp)
@@ -23,7 +27,9 @@ import { NewListPage } from '../pages/new-list/new-list'
     MyApp,
     HomePage,
     ListPage,
-    NewListPage
+    NewListPage,
+    LinkPage,
+    SharePage
   ],
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },

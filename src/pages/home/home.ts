@@ -8,6 +8,7 @@ import { List } from '../../models/models';
 
 import { ListPage } from '../list/list';
 import { NewListPage } from '../new-list/new-list'
+import { LinkPage } from '../link/link'
 
 @Component({
   selector: 'page-home',
@@ -18,6 +19,7 @@ export class HomePage {
   public pins: List[]
   public listPage = ListPage
   public newListPage = NewListPage
+  public linkPage = LinkPage
 
   constructor(public navCtrl: NavController,
               public todoServices: TodoServices,

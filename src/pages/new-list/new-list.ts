@@ -14,6 +14,7 @@ export class NewListPage {
   public list: List = new List;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public todoServices: TodoServices, public evt :Events) {
+    this.list.title = ""
     this.list.public = false;
   }
 

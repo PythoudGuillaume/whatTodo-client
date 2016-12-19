@@ -1,11 +1,6 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Home</ion-title>
-    <ion-buttons start>
-      <button ion-button icon-only [navPush]="newListPage">
-        <ion-icon name="add-circle" color="primary"></ion-icon>
-      </button>
-    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -28,4 +23,18 @@
       {{list.title}}
     </ion-card-header>
   </ion-card>
+
+  <ion-fab bottom right #fab>
+    <button ion-fab color="dark">
+      <ion-icon name="more"></ion-icon>
+    </button>
+    <ion-fab-list side="top">
+      <button ion-fab color="danger" [navPush]="newListPage">
+        <ion-icon name="add"></ion-icon>
+      </button>
+      <button ion-fab color="primary" [navPush]="linkPage">
+        <ion-icon name="link"></ion-icon>
+      </button>
+    </ion-fab-list>
+  </ion-fab>
 </ion-content>

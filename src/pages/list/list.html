@@ -6,6 +6,9 @@
       <button ion-button icon-only (click)="pinList()">
         <ion-icon [name]="icon()" color="primary"></ion-icon>
       </button>
+      <button ion-button icon-only (click)="share()">
+        <ion-icon name="share"></ion-icon>
+      </button>
     </ion-buttons>
   </ion-navbar>
 
@@ -27,10 +30,10 @@
   </ion-list>
   <form (ngSubmit)="addItem()">
     <ion-item>
-      <ion-label floating>text</ion-label>
-      <ion-textarea [(ngModel)]="text" name="answer"></ion-textarea>
+      <ion-label floating>What to do?</ion-label>
+      <ion-input type="text" [(ngModel)]="text" name="answer"></ion-input>
     </ion-item>
-    <button ion-button type="submit" block>Add item</button>
+    <button ion-button type="submit" block [disabled]="text.length === 0">Add item</button>
   </form>
 
 </ion-content>
